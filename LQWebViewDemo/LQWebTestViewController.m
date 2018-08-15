@@ -21,10 +21,10 @@
     LQWebView *web = [[LQWebView alloc]initWithFrame:self.view.bounds];
     [self.view addSubview:web];
     [web loadURLString:@"http://www.baidu.com"];
+    
     [web addTitleObserverWithHandler:^(NSString *key, id info) {
         NSLog(@"title : %@", info);
     }];
-    
     
     [web addProgressObserverWithHandler:^(NSString *key, id info) {
 //        CGFloat progress = (CGFloat)info;

@@ -22,7 +22,19 @@ typedef void(^LQWebViewScriptMessageHandler)(NSString *key, id info);
 - (BOOL) canGoBack ;
 - (void) goBack ;
 
+/**
+ 加载网络URL（无参数）
+
+ @param urlString URL地址
+ */
 - (void) loadURLString:(NSString *)urlString ;
+
+/**
+ 加载网络URL（带参数），拼接在URL后
+
+ @param urlStr URL地址
+ @param param 参数（参数名称为key，参数内容为value）
+ */
 - (void) loadUrlString:(NSString *)urlStr params:(NSDictionary *)param ;
 - (void) loadURL:(NSURL *)url ;
 
@@ -55,7 +67,7 @@ typedef void(^LQWebViewScriptMessageHandler)(NSString *key, id info);
  （携带多个参数的方法，单个参数可使用 ‘addJavaScriptMethod: param:’）
 
  @param methodName JS 方法名称
- @param params 多个参数
+ @param params 多个参数（参数值）
  */
 - (void) addJavaScriptMethod:(NSString *)methodName params:(NSArray *) params ;
 
@@ -69,6 +81,11 @@ typedef void(^LQWebViewScriptMessageHandler)(NSString *key, id info);
 - (void) addUserScript:(NSString *)js ;
 
 
+/**
+ 添加属性观察者，常用的为title，加载进度
+
+ @param handler 回调
+ */
 - (void) addProgressObserverWithHandler:(LQWebViewScriptMessageHandler) handler ;
 - (void) addTitleObserverWithHandler:(LQWebViewScriptMessageHandler) handler ;
 
