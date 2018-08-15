@@ -1,6 +1,16 @@
 # LQWebView
 对WKWebView 的封装，继承自UIView，方便使用！
 
+# 添加
+##### 手动
+可直接将项目目录下的 ‘LQWebView’ 文件夹拖入项目使用
+
+##### Cocoapods
+在Pidfile文件添加
+```
+pod 'LQWebView'
+```
+
 # 使用
 使用简单，只需要创建/添加到视图即可：
 ```
