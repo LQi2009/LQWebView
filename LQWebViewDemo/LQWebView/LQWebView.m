@@ -189,6 +189,18 @@
 }
 
 #pragma mark - ============= 添加观察者 ===========================
+- (void) addWebViewObserverForKeyPath:(NSString *) keyPath handler:(LQWebViewScriptMessageHandler) handler {
+    
+    [self.wkView addObserver:self forKeyPath:keyPath options:(NSKeyValueObservingOptionNew) context:nil];
+    
+    LQJavaScriptItem *item = [[LQJavaScriptItem alloc]init];
+    
+    item.key = [self __md5Encode:keyPath];
+    item.methodName = keyPath;
+    item.handler = handler;
+    [self.observers setObject:item forKey:item.key];
+}
+
 - (void) addProgressObserverWithHandler:(LQWebViewScriptMessageHandler) handler {
     
     [self.wkView addObserver:self forKeyPath:@"estimatedProgress" options:(NSKeyValueObservingOptionNew) context:nil];

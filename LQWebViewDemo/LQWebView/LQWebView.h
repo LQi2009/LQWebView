@@ -80,12 +80,13 @@ typedef void(^LQWebViewScriptMessageHandler)(NSString *key, id info);
 - (void) addJavaScript:(NSString *) js ;
 - (void) addUserScript:(NSString *)js ;
 
-
 /**
- 添加属性观察者，常用的为title，加载进度
+ 添加WebView的属性观察者，常用的为title，加载进度
 
+ @param keyPath 待观察的属性名称
  @param handler 回调
  */
+- (void) addWebViewObserverForKeyPath:(NSString *) keyPath handler:(LQWebViewScriptMessageHandler) handler ;
 - (void) addProgressObserverWithHandler:(LQWebViewScriptMessageHandler) handler ;
 - (void) addTitleObserverWithHandler:(LQWebViewScriptMessageHandler) handler ;
 
