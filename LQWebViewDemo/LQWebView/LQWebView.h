@@ -22,6 +22,7 @@ typedef void(^LQWebViewScriptMessageHandler)(NSString *key, id info);
 - (BOOL) canGoBack ;
 - (void) goBack ;
 
+#pragma mark - ============= 加载网络URL ====================
 /**
  加载网络URL（无参数）
 
@@ -36,14 +37,18 @@ typedef void(^LQWebViewScriptMessageHandler)(NSString *key, id info);
  @param param 参数（参数名称为key，参数内容为value）
  */
 - (void) loadUrlString:(NSString *)urlStr params:(NSDictionary *)param ;
-- (void) loadURL:(NSURL *)url ;
 
+
+- (void) loadURL:(NSURL *)url ;
+- (void) loadRequest:(NSURLRequest *) req ;
+
+#pragma mark - ============= 加载本地文件 ========================
 /**
  加载本地HTML文件
  
  @param file html文件名
  */
-- (void) loadLocalFile:(NSString *)file ;
+- (void) loadLocalHTML:(NSString *) file ;
 
 /**
  加载本地的html文件（蓝色文件夹）
@@ -51,9 +56,18 @@ typedef void(^LQWebViewScriptMessageHandler)(NSString *key, id info);
  @param path 文件在文件夹内的相对路径（包含文件夹名称）
  @param ext 扩展字段，比如链接中拼接的子路径/参数等
  */
+- (void) loadLocalHTML:(NSString *) path withExtension:(NSString *)ext ;
 
-- (void) loadLocalFilePath:(NSString *)path withExtension:(NSString *)ext ;
+/**
+ 加载本地文件(pdf/excel/world)
 
+ @param file 文件名称
+ @param ext 扩展字段，比如,后缀名称, 如果名称含后缀, 可传nil
+ */
+- (void) loadLocalFile:(NSString *) file withExtension:(NSString *)ext ;
+- (void) loadLocalFile:(NSString *) file ;
+
+#pragma mark - ============= 添加需要执行的js方法 ==============
 /**
  添加需要执行的JS方法
 
@@ -80,6 +94,7 @@ typedef void(^LQWebViewScriptMessageHandler)(NSString *key, id info);
 - (void) addJavaScript:(NSString *) js ;
 - (void) addUserScript:(NSString *)js ;
 
+#pragma mark - ============= 添加观察者 ===========================
 /**
  添加WebView的属性观察者，常用的为title，加载进度
 
@@ -90,6 +105,7 @@ typedef void(^LQWebViewScriptMessageHandler)(NSString *key, id info);
 - (void) addProgressObserverWithHandler:(LQWebViewScriptMessageHandler) handler ;
 - (void) addTitleObserverWithHandler:(LQWebViewScriptMessageHandler) handler ;
 
+#pragma mark: - addScriptMessageHandler 注入js回调方法
 /**
  注入JS需要调用的原生协议
 

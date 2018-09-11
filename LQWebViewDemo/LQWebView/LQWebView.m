@@ -93,16 +93,19 @@
 
 - (void) loadUrlString:(NSString *)urlStr params:(NSDictionary *)param {
     
-    NSMutableString *paramStr = [NSMutableString string];
-    for (NSString *key in param.allKeys) {
-        if (paramStr.length <= 0) {
-            [paramStr appendString:[NSString stringWithFormat:@"%@=%@", key, [self __objToJson:[param objectForKey:key]]]];
-        } else {
-            [paramStr appendString:[NSString stringWithFormat:@"&%@=%@", key, [self __objToJson:[param objectForKey:key]]]];
+    if (param && param.count > 0) {
+        
+        NSMutableString *paramStr = [NSMutableString string];
+        for (NSString *key in param.allKeys) {
+            if (paramStr.length <= 0) {
+                [paramStr appendString:[NSString stringWithFormat:@"%@=%@", key, [self __objToJson:[param objectForKey:key]]]];
+            } else {
+                [paramStr appendString:[NSString stringWithFormat:@"&%@=%@", key, [self __objToJson:[param objectForKey:key]]]];
+            }
         }
+        
+        urlStr = [NSString stringWithFormat:@"%@?%@", urlStr, paramStr];
     }
-    
-    urlStr = [NSString stringWithFormat:@"%@?%@", urlStr, paramStr];
     
     NSURL *url = [NSURL URLWithString:urlStr];
     [self loadURL:url];
@@ -116,25 +119,17 @@
     }
     
     NSURLRequest *req = [NSURLRequest requestWithURL:url];
+    [self loadRequest:req];
+}
+
+- (void) loadRequest:(NSURLRequest *) req {
+    
     [self.wkView loadRequest:req];
 }
 
 #pragma mark - ============= 加载本地文件 ========================
-- (void) loadLocalFilePath:(NSString *)path withExtension:(NSString *)ext {
-    
-    if (ext == nil) {
-        ext = @"";
-    }
-    
-    NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
-    
-    NSString *fullPath = [NSString stringWithFormat:@"file://%@/%@%@", bundlePath, path, ext];
-    NSURL *url = [NSURL URLWithString:fullPath];
-    NSURLRequest *req = [NSURLRequest requestWithURL:url];
-    [self.wkView loadRequest:req];
-}
 
-- (void) loadLocalFile:(NSString *)file {
+- (void) loadLocalHTML:(NSString *) file {
     
     NSURL *url ;
     if ([file hasSuffix:@".html"]) {
@@ -143,8 +138,32 @@
         url = [[NSBundle mainBundle] URLForResource:file withExtension:@"html"];
     }
     
-    NSURLRequest *req = [NSURLRequest requestWithURL:url];
-    [self.wkView loadRequest:req];
+    [self loadURL:url];
+}
+
+- (void) loadLocalHTML:(NSString *) path withExtension:(NSString *)ext {
+    
+    if (ext == nil) {
+        ext = @"";
+    }
+    
+    NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
+    
+    NSString *fullPath = [NSString stringWithFormat:@"file://%@/%@%@", bundlePath, path, ext];
+    
+    [self loadURLString:fullPath];
+}
+
+- (void) loadLocalFile:(NSString *) file {
+    
+    [self loadLocalFile:file withExtension:nil];
+}
+
+- (void) loadLocalFile:(NSString *) file withExtension:(NSString *)ext {
+    
+    NSURL *url = [[NSBundle mainBundle] URLForResource:file withExtension:ext];
+    
+    [self loadURL:url];
 }
 
 #pragma mark - ============= 添加需要执行的js方法 ==============

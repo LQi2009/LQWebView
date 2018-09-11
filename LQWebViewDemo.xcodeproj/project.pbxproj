@@ -17,6 +17,7 @@
 		D23FCFAE2123E1FD002971CF /* LQWebViewDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D23FCFAD2123E1FD002971CF /* LQWebViewDemoUITests.m */; };
 		D23FCFBE2123E217002971CF /* LQWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = D23FCFBD2123E217002971CF /* LQWebView.m */; };
 		D23FCFC321242B29002971CF /* LQWebTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D23FCFC221242B29002971CF /* LQWebTestViewController.m */; };
+		D289A7EC214757F5002D1F19 /* test.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D289A7EB214757F5002D1F19 /* test.pdf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		D23FCFBD2123E217002971CF /* LQWebView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LQWebView.m; sourceTree = "<group>"; };
 		D23FCFC121242B29002971CF /* LQWebTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LQWebTestViewController.h; sourceTree = "<group>"; };
 		D23FCFC221242B29002971CF /* LQWebTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LQWebTestViewController.m; sourceTree = "<group>"; };
+		D289A7EB214757F5002D1F19 /* test.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = test.pdf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 		D23FCF882123E1FB002971CF /* LQWebViewDemo */ = {
 			isa = PBXGroup;
 			children = (
+				D289A7EB214757F5002D1F19 /* test.pdf */,
 				D23FCFBB2123E206002971CF /* LQWebView */,
 				D23FCF892123E1FB002971CF /* AppDelegate.h */,
 				D23FCF8A2123E1FB002971CF /* AppDelegate.m */,
@@ -255,6 +258,7 @@
 			files = (
 				D23FCF962123E1FD002971CF /* LaunchScreen.storyboard in Resources */,
 				D23FCF932123E1FD002971CF /* Assets.xcassets in Resources */,
+				D289A7EC214757F5002D1F19 /* test.pdf in Resources */,
 				D23FCF912123E1FB002971CF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -20,16 +20,21 @@
     // Do any additional setup after loading the view.
     LQWebView *web = [[LQWebView alloc]initWithFrame:self.view.bounds];
     [self.view addSubview:web];
-    [web loadURLString:@"http://www.baidu.com"];
     
-    [web addTitleObserverWithHandler:^(NSString *key, id info) {
-        NSLog(@"title : %@", info);
-    }];
-    
-    [web addProgressObserverWithHandler:^(NSString *key, id info) {
-//        CGFloat progress = (CGFloat)info;
-        NSLog(@"progress: %@", info);
-    }];
+//    [web loadLocalFile:@"test.pdf"];
+    [web loadLocalFile:@"test.pdf"];
+//    [web loadLocalFile:@"test.xlsx"];
+//    [web loadLocalFilePath:@"test.xlsx" withExtension:nil];
+//    [web loadURLString:@"http://www.baidu.com"];
+//
+//    [web addTitleObserverWithHandler:^(NSString *key, id info) {
+//        NSLog(@"title : %@", info);
+//    }];
+//
+//    [web addProgressObserverWithHandler:^(NSString *key, id info) {
+////        CGFloat progress = (CGFloat)info;
+//        NSLog(@"progress: %@", info);
+//    }];
     
     UIButton *back = [UIButton buttonWithType:(UIButtonTypeCustom)];
     
