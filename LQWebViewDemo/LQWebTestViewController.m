@@ -21,8 +21,8 @@
     LQWebView *web = [[LQWebView alloc]initWithFrame:self.view.bounds];
     [self.view addSubview:web];
     
-//    [web loadLocalFile:@"test.pdf"];
     [web loadLocalFile:@"test.pdf"];
+//    [web loadURLString:@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531415247542&di=2f753b5f3b5497a978171bbceb97b2a8&imgtype=0&src=http%3A%2F%2Fimg5.zdface.com%2F006yCHQygy1fji19zzsljj30m80etdgu.jpg"];
 //    [web loadLocalFile:@"test.xlsx"];
 //    [web loadLocalFilePath:@"test.xlsx" withExtension:nil];
 //    [web loadURLString:@"http://www.baidu.com"];
@@ -36,12 +36,16 @@
 //        NSLog(@"progress: %@", info);
 //    }];
     
+    web.isShowProgressIndicator = YES;
+//    web.progressColor = [UIColor redColor];
+    
     UIButton *back = [UIButton buttonWithType:(UIButtonTypeCustom)];
     
     back.frame = CGRectMake(40, 40, 100, 40);
     back.backgroundColor = [UIColor redColor];
     [back addTarget:self action:@selector(backAction) forControlEvents:(UIControlEventTouchUpInside)];
     [self.view addSubview:back];
+    
 }
 
 - (void) backAction {
@@ -50,6 +54,8 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    
+    
 }
 
 /*

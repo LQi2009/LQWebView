@@ -48,15 +48,15 @@
 
 @end
 
-
 #pragma =================== LQWebView ===============================
-@interface LQWebView ()<WKScriptMessageHandler, WKNavigationDelegate>
+@interface LQWebView ()<WKScriptMessageHandler, WKNavigationDelegate, WKUIDelegate>
 
 @property (nonatomic, strong) WKWebView *wkView;
 @property (nonatomic, strong) NSMutableDictionary *messageHandlers;
 @property (nonatomic, strong) NSMutableDictionary *javaScriptMethods;
 @property (nonatomic, strong) NSMutableDictionary *observers;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, strong) UIProgressView *progressView;
 @end
 @implementation LQWebView
 
@@ -69,9 +69,32 @@
     return self;
 }
 
+- (void) clearCache {
+    
+    NSSet *websiteDataTypes = [WKWebsiteDataStore allWebsiteDataTypes];
+    NSDate *dateFrom = [NSDate dateWithTimeIntervalSince1970:0];
+    [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:websiteDataTypes modifiedSince:dateFrom completionHandler:^{
+        // Done
+        NSLog(@"清除缓存");
+    }];
+}
+
 -(WKWebView *)webView {
     
     return _wkView;
+}
+
+- (BOOL)isLoading {
+    
+    return self.wkView.isLoading;
+}
+
+- (void) stopLoading {
+    [self.wkView stopLoading];
+}
+
+- (void) reload {
+    [self.wkView reload];
 }
 
 - (BOOL) canGoBack {
@@ -83,6 +106,57 @@
     if ([self.wkView canGoBack]) {
         [self.wkView goBack];
     }
+}
+
+- (void)setAllowsInlineMediaPlay:(BOOL)allowsInlineMediaPlay {
+    _allowsInlineMediaPlay = allowsInlineMediaPlay;
+    
+    self.wkView.configuration.allowsInlineMediaPlayback = allowsInlineMediaPlay;
+}
+
+- (void)setBackGestureEnable:(BOOL)backGestureEnable {
+    _backGestureEnable = backGestureEnable;
+    self.wkView.allowsBackForwardNavigationGestures = backGestureEnable ;
+}
+
+- (void)setIsShowProgressIndicator:(BOOL)isShowProgressIndicator {
+    _isShowProgressIndicator = isShowProgressIndicator;
+    
+    if (isShowProgressIndicator) {
+        
+        __weak typeof(self) ws = self;
+        [self.progressView setProgress:0.2 animated:YES];
+        self.progressView.alpha = 1.0;
+        [self addProgressObserverWithHandler:^(NSString *key, id info) {
+            
+            NSNumber *num = info;
+            CGFloat progress = [num floatValue] ;
+            
+            if (progress == 1.0) {
+                
+                [ws.progressView setProgress:progress animated:NO];
+                [UIView animateWithDuration:0.6 animations:^{
+                    ws.progressView.alpha = 0;
+                }];
+                
+            } else if (progress < 1.0) {
+                
+                [ws.progressView setProgress:progress animated:YES];
+            } else {
+                ws.progressView.alpha = 0;
+            }
+        }];
+    }
+}
+
+- (void)setProgressColor:(UIColor *)progressColor {
+    _progressColor = progressColor ;
+    
+    if (_isShowProgressIndicator == NO) {
+        self.isShowProgressIndicator = YES;
+    }
+    
+    self.progressView.progressTintColor = progressColor;
 }
 
 #pragma mark - ============= 加载网络URL ====================
@@ -281,7 +355,7 @@
     }
 }
 
-#pragma mark: - WKNavigationDelegate
+#pragma mark: - ============  WKNavigationDelegate  ===============
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
     
     NSLog(@"开始调用");
@@ -289,16 +363,12 @@
         [self.delegate webViewStartLoad:self];
     }
     
-    if (self.isShowIndicator) {
-        [self.activityIndicator startAnimating];
-    }
+    [self resetIndicatorState:YES];
 }
 
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
     NSLog(@"页面加载完成");
-    if (self.isShowIndicator) {
-        [self.activityIndicator stopAnimating];
-    }
+    [self resetIndicatorState:NO];
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(webViewLoadSuccess:)]) {
         [self.delegate webViewLoadSuccess:self];
@@ -346,8 +416,64 @@
 
 - (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
     NSLog(@"页面加载失败");
+    [self resetIndicatorState:NO];
+    
     if (self.delegate && [self.delegate respondsToSelector:@selector(webView:loadFailed:)]) {
         [self.delegate webView:self loadFailed:error];
+    }
+}
+
+- (void)webView:(WKWebView *)webView didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(webView:authenticationChallenge:completionHandler:)]) {
+        [self.delegate webView:self authenticationChallenge:challenge completionHandler:completionHandler];
+    }
+}
+
+#pragma mark: - ===========  WKUIDelegate  ===============
+/**
+ webView中弹出警告框时调用, 只能有一个按钮
+ 
+ @param webView webView
+ @param message 提示信息
+ @param frame 可用于区分哪个窗口调用的
+ @param completionHandler 警告框消失的时候调用, 回调给JS
+ */
+- (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler {
+    
+    if (self.uiDelegate && [self.uiDelegate respondsToSelector:@selector(webView:alertJSMessage:completionHandler:)]) {
+        [self.uiDelegate webView:self alertJSMessage:message completionHandler:completionHandler];
+    }
+}
+
+/** 对应js的confirm方法
+ webView中弹出选择框时调用, 两个按钮
+ 
+ @param webView webView description
+ @param message 提示信息
+ @param frame 可用于区分哪个窗口调用的
+ @param completionHandler 确认框消失的时候调用, 回调给JS, 参数为选择结果: YES or NO
+ */
+- (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL result))completionHandler {
+    
+    if (self.uiDelegate && [self.uiDelegate respondsToSelector:@selector(webView:confirmJSMessage:completionHandler:)]) {
+        [self.uiDelegate webView:self confirmJSMessage:message completionHandler:completionHandler];
+    }
+}
+
+/** 对应js的prompt方法
+ webView中弹出输入框时调用, 两个按钮 和 一个输入框
+ 
+ @param webView webView description
+ @param prompt 提示信息
+ @param defaultText 默认提示文本
+ @param frame 可用于区分哪个窗口调用的
+ @param completionHandler 输入框消失的时候调用, 回调给JS, 参数为输入的内容
+ */
+- (void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(nullable NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString * _Nullable result))completionHandler {
+    
+    if (self.uiDelegate && [self.uiDelegate respondsToSelector:@selector(webView:textInputJSMessage:defaultText:completionHandler:)]) {
+        [self.uiDelegate webView:self textInputJSMessage:prompt defaultText:defaultText completionHandler:completionHandler];
     }
 }
 
@@ -356,6 +482,12 @@
     
     self.wkView.frame = self.bounds;
     self.wkView.backgroundColor = self.backgroundColor;
+    
+    if (self.isShowProgressIndicator) {
+        [self bringSubviewToFront:self.progressView];
+        self.progressView.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), 3);
+    }
+    
     if (self.isShowIndicator) {
         self.activityIndicator.center = self.center;
     }
@@ -367,12 +499,7 @@
     [self.wkView stopLoading];
     
     if (self.isAutoClearCache) {
-        NSSet *websiteDataTypes = [WKWebsiteDataStore allWebsiteDataTypes];
-        NSDate *dateFrom = [NSDate dateWithTimeIntervalSince1970:0];
-        [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:websiteDataTypes modifiedSince:dateFrom completionHandler:^{
-            // Done
-            NSLog(@"清除缓存");
-        }];
+        [self clearCache];
     }
     
     @try {
@@ -447,7 +574,52 @@
     return _activityIndicator;
 }
 
-#pragma mark - Private Methods
+- (UIProgressView *)progressView {
+    if (_progressView == nil) {
+        _progressView = [[UIProgressView alloc]initWithProgressViewStyle:(UIProgressViewStyleDefault)];
+        
+        _progressView.trackTintColor = self.backgroundColor;
+        [self addSubview:_progressView];
+    }
+    
+    return _progressView ;
+}
+
+#pragma mark - ============= Private Methods ==============
+- (void) resetIndicatorState:(BOOL) isShow {
+    
+    if (isShow) {
+        
+        if (self.isShowIndicator) {
+            [self.activityIndicator startAnimating];
+        }
+        
+        if (self.isShowNetIndicator) {
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        }
+        
+        if (self.isShowProgressIndicator) {
+            self.progressView.alpha = 1.0;
+            self.progressView.transform = CGAffineTransformMakeScale(1.0, 1.5) ;
+        }
+        
+    } else {
+        
+        if (self.isShowProgressIndicator) {
+            self.progressView.alpha = 0;
+            self.progressView.transform = CGAffineTransformMakeScale(1.0, 1.0) ;
+        }
+        
+        if (self.isShowIndicator) {
+            [self.activityIndicator stopAnimating];
+        }
+        
+        if (self.isShowNetIndicator) {
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        }
+    }
+    
+}
 - (NSString *) __objToJson:(id) obj {
     if ([obj isKindOfClass:[NSString class]]) {
         return (NSString *)obj;
@@ -477,15 +649,6 @@
     
     return output;
 }
-
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
 
 @end
 
