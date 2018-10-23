@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "LQWebView"
-  s.version      = "1.2.0"
+  s.version      = "1.3.0"
   s.summary      = "对WKWebView 的封装，继承自UIView"
 
   # This description is used to generate tags and improve search results.
@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-  对WKWebView 的封装，继承自UIView，封装了一些方法，方便使用！
+  对WKWebView 的封装，继承自UIView，封装了常用方法，方便使用！
                    DESC
 
   s.homepage     = "https://github.com/LQi2009/LQWebView"
