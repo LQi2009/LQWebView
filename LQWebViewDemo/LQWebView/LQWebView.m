@@ -41,6 +41,7 @@
 @property (nonatomic, copy) NSString *jsonString;
 @property (nonatomic, copy) NSString *methodName;
 @property (nonatomic, copy) LQWebViewScriptMessageHandler handler;
+@property (nonatomic, copy) LQWebViewJavaScriptCompletionHandler jsHandler;
 @property (nonatomic) id obj;
 @end
 
@@ -241,17 +242,18 @@
 }
 
 #pragma mark - ============= 添加需要执行的js方法 ==============
-- (void) addJavaScriptMethod:(NSString *)methodName param:(NSDictionary *)param {
+- (void) addJavaScriptMethod:(NSString *)methodName param:(NSDictionary *)param completionHandler:(LQWebViewJavaScriptCompletionHandler) handler {
     
     LQJavaScriptItem *item = [[LQJavaScriptItem alloc]init];
     
     item.key = [self __md5Encode:methodName];
     item.methodName = methodName;
     item.jsonString = [self __objToJson:param];
+    item.jsHandler = handler ;
     [self.javaScriptMethods setObject:item forKey:item.key];
 }
 
-- (void) addJavaScriptMethod:(NSString *)methodName params:(NSArray *) params {
+- (void) addJavaScriptMethod:(NSString *)methodName params:(NSArray *) params completionHandler:(LQWebViewJavaScriptCompletionHandler) handler {
     
     NSMutableArray *objs = [NSMutableArray arrayWithCapacity:params.count];
     for (id obj in params) {
@@ -263,15 +265,17 @@
     item.key = [self __md5Encode:methodName];
     item.methodName = methodName;
     item.obj = objs;
+    item.jsHandler = handler ;
     [self.javaScriptMethods setObject:item forKey:item.key];
 }
 
 #pragma mark - ============= 添加需要执行的js ==================
-- (void) addJavaScript:(NSString *) js {
+- (void) addJavaScript:(NSString *) js completionHandler:(LQWebViewJavaScriptCompletionHandler) handler {
     
     LQJavaScriptItem *item = [[LQJavaScriptItem alloc]init];
     item.key = [self __md5Encode:js];
     item.obj = js;
+    item.jsHandler = handler ;
     [self.javaScriptMethods setObject:item forKey:item.key];
 }
 
@@ -281,6 +285,18 @@
     [self.wkView.configuration.userContentController addUserScript:us];
 }
 
+- (void) runJavaScriptMethod:(NSString *) methodName param:(NSDictionary *)param completionHandler:(void (^ _Nullable)(_Nullable id info, NSError * _Nullable error))completionHandler {
+    
+    NSString *json = [self __objToJson:param];
+    
+    if (json == nil) {
+        json = @"";
+    }
+    
+    NSString *js = [NSString stringWithFormat:@"%@('%@')", methodName, json];
+    
+    [self.wkView evaluateJavaScript:js completionHandler:completionHandler];
+}
 #pragma mark - ============= 添加观察者 ===========================
 - (void) addWebViewObserverForKeyPath:(NSString *) keyPath handler:(LQWebViewScriptMessageHandler) handler {
     
@@ -403,11 +419,17 @@
                 
                 [webView evaluateJavaScript:js completionHandler:^(id _Nullable info, NSError * _Nullable error) {
                     NSLog(@"%@", error);
+                    if (item.jsHandler) {
+                        item.jsHandler(info, error) ;
+                    }
                 }];
             } else if (item.obj && [item.obj isKindOfClass:[NSString class]] && (item.methodName== nil || item.methodName.length <= 0)) {
                 NSString *js = (NSString *)item.obj;
                 [webView evaluateJavaScript:js completionHandler:^(id _Nullable info, NSError * _Nullable error) {
                     NSLog(@"%@", error);
+                    if (item.jsHandler) {
+                        item.jsHandler(info, error) ;
+                    }
                 }];
             }
         }
@@ -625,6 +647,8 @@
         return (NSString *)obj;
     } else if ([obj isKindOfClass:[NSData class]]) {
         return [[NSString alloc] initWithData:(NSData *)obj encoding:NSUTF8StringEncoding];
+    } else if (obj == nil) {
+        return nil;
     }
     
     NSData *data = [NSJSONSerialization dataWithJSONObject:obj options:kNilOptions error:nil];

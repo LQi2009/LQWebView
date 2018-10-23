@@ -10,7 +10,7 @@
 #import <WebKit/WebKit.h>
 
 /**
- 回调Block
+ 注入JS协议回调Block
 
  @param key key
  @param info 详细信息, 如果回调的内容为基本类型, 则info为NSNumber
@@ -22,6 +22,13 @@
  */
 typedef void(^LQWebViewScriptMessageHandler)(NSString *key, id info);
 
+/**
+ 执行注入的JS方法回调Block
+
+ @param info 描述信息
+ @param error 错误信息
+ */
+typedef void(^LQWebViewJavaScriptCompletionHandler)(id info, NSError *error);
 @protocol LQWebViewDelegate ;
 @protocol LQWebViewUIDelegate ;
 @interface LQWebView : UIView
@@ -50,7 +57,7 @@ typedef void(^LQWebViewScriptMessageHandler)(NSString *key, id info);
 /** 加载时是否显示指示器, 默认为系统 UIActivityIndicatorView */
 @property (nonatomic, assign) BOOL isShowIndicator;
 
-/** 是否显示加载进度, 如果自己通过进度观察添加, 则不需要设置次属性 */
+/** 是否显示加载进度, 如果自己通过进度观察添加, 则不需要设置此属性 */
 @property (nonatomic, assign) BOOL isShowProgressIndicator;
 
 /** 是否显示状态栏左上角的网络指示器 */
@@ -114,8 +121,9 @@ typedef void(^LQWebViewScriptMessageHandler)(NSString *key, id info);
 
  @param methodName JS 方法名称
  @param param 参数（会转换为Json传递）
+ @param handler 回调结果
  */
-- (void) addJavaScriptMethod:(NSString *)methodName param:(NSDictionary *)param ;
+- (void) addJavaScriptMethod:(NSString *)methodName param:(NSDictionary *)param completionHandler:(LQWebViewJavaScriptCompletionHandler) handler ;
 
 /**
  添加需要执行的JS方法
@@ -123,16 +131,30 @@ typedef void(^LQWebViewScriptMessageHandler)(NSString *key, id info);
 
  @param methodName JS 方法名称
  @param params 多个参数（参数值）
+ @param handler 回调结果
  */
-- (void) addJavaScriptMethod:(NSString *)methodName params:(NSArray *) params ;
+- (void) addJavaScriptMethod:(NSString *)methodName params:(NSArray *) params completionHandler:(LQWebViewJavaScriptCompletionHandler) handler ;
 
 /**
  添加需要执行的JS代码
 
  @param js js 代码
+ @param handler 回调结果
  */
-- (void) addJavaScript:(NSString *) js ;
+- (void) addJavaScript:(NSString *) js completionHandler:(LQWebViewJavaScriptCompletionHandler) handler ;
 - (void) addUserScript:(NSString *)js ;
+
+// 以上方法都是在加载WebView完成的同时执行的JavaScript方法，如果在页面加载后某个时机想要执行js方法，可使用下面的方法
+
+#pragma mark - ============= 单独执行JavaScript方法 ================
+/**
+ 单独执行一段JS代码（在WebView显示完成后）
+
+ @param methodName JS 方法名称
+ @param param 参数（会转换为Json传递）
+ @param handler 执行后的回调
+ */
+- (void) runJavaScriptMethod:(NSString *) methodName param:(NSDictionary *)param completionHandler:(LQWebViewJavaScriptCompletionHandler) handler ;
 
 #pragma mark - ============= 添加观察者 ===========================
 /**
