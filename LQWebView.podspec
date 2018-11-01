@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "LQWebView"
-  s.version      = "1.3.0"
+  s.version      = "1.3.1"
   s.summary      = "对WKWebView 的封装，继承自UIView"
 
   # This description is used to generate tags and improve search results.

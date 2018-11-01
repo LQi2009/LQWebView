@@ -5,6 +5,8 @@
 //  Created by LiuQiqiang on 2018/8/15.
 //  Copyright © 2018年 LiuQiqiang. All rights reserved.
 //
+/* GitHub地址：https://github.com/LQi2009/LQWebView
+ */
 
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>

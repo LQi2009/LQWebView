@@ -5,6 +5,8 @@
 //  Created by LiuQiqiang on 2018/8/15.
 //  Copyright © 2018年 LiuQiqiang. All rights reserved.
 //
+/* GitHub地址：https://github.com/LQi2009/LQWebView
+ */
 
 #import "LQWebView.h"
 #import <CommonCrypto/CommonCrypto.h>
@@ -449,6 +451,8 @@
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(webView:authenticationChallenge:completionHandler:)]) {
         [self.delegate webView:self authenticationChallenge:challenge completionHandler:completionHandler];
+    } else {
+        completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
     }
 }
 
