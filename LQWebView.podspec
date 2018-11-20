@@ -35,8 +35,8 @@ Pod::Spec.new do |s|
     lq_obj.source_files  = "LQWebView", "LQWebViewDemo/LQWebView/*.{h,m}"
   end
 
-  s.subspec 'Swift' do |swift|
-    swift.source_files  = "LQWebView", "LQWebViewSwift/LQWebViewSwift/LQWebView/*.{swift}"
+  s.subspec 'SF' do |sf|
+    sf.source_files  = "LQWebView", "LQWebViewSwift/LQWebView/*.{swift}"
   end
 
 end
