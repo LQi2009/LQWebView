@@ -72,6 +72,49 @@
     return self;
 }
 
+- (void) configUserAgentAsync:(NSString *) appendUserAgent
+                  completionHandler:(void(^ _Nullable)(id _Nullable info, NSError * _Nullable error)) handler {
+    
+    [self.webView evaluateJavaScript:@"navigator.userAgent" completionHandler:^(id _Nullable info, NSError * _Nullable error) {
+        NSString *old = (NSString *)info;
+        if ([old hasSuffix:appendUserAgent]) {
+            if (handler) {
+                handler(info, error);
+            }
+        } else {
+            NSString *newUA = [NSString stringWithFormat:@"%@%@", old, appendUserAgent];
+            NSDictionary *dic = @{@"UserAgent": newUA};
+            [[NSUserDefaults standardUserDefaults] registerDefaults:dic];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            if (handler) {
+                handler(info, error);
+            }
+        }
+    }];
+}
+
++ (void) configGlobalUserAgentSync:(NSString *) appendUserAgent {
+    
+    NSString *oldAgent = [[[UIWebView alloc]init] stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
+    
+    if ([oldAgent hasSuffix:appendUserAgent]) {
+        return ;
+    }
+    
+    NSString *newAgent = [NSString stringWithFormat:@"%@%@", oldAgent, appendUserAgent];
+    NSDictionary *dic = @{@"UserAgent": newAgent};
+    [[NSUserDefaults standardUserDefaults] registerDefaults:dic];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (void) configCustomGlobalUserAgentSync:(NSString *) userAgent {
+    
+    NSDictionary *dic = @{@"UserAgent": userAgent};
+    [[NSUserDefaults standardUserDefaults] registerDefaults:dic];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 - (void) clearCache {
     
     NSSet *websiteDataTypes = [WKWebsiteDataStore allWebsiteDataTypes];
@@ -109,6 +152,13 @@
     if ([self.wkView canGoBack]) {
         [self.wkView goBack];
     }
+}
+
+- (void) invalidLongGesture {
+    
+    NSString *js = @"document.documentElement.style.webkitTouchCallout='none';document.documentElement.style.webkitUserSelect='none';";
+    
+    [self addUserScript:js];
 }
 
 - (void)setAllowsInlineMediaPlay:(BOOL)allowsInlineMediaPlay {
@@ -160,6 +210,12 @@
     }
     
     self.progressView.progressTintColor = progressColor;
+}
+
+- (void)setUiDelegate:(id<LQWebViewUIDelegate>)uiDelegate {
+    _uiDelegate = uiDelegate ;
+    
+    self.wkView.UIDelegate = self ;
 }
 
 #pragma mark - ============= 加载网络URL ====================

@@ -68,6 +68,35 @@ typedef void(^LQWebViewJavaScriptCompletionHandler)(id info, NSError *error);
 /** 加载进度条颜色, 如果设置此属性, 则自动设置 isShowProgressIndicator 为YES */
 @property (nonatomic, strong) UIColor * progressColor ;
 
+/**
+ 全局配置WebView的UserAgent，会在原UserAgent后追加自定义内容
+ 同步执行的，调用之后就会起效果，内部使用的是UIWebView
+
+ @param appendUserAgent 需要追加在UserAgent的自定义内容
+ */
++ (void) configGlobalUserAgentSync:(NSString *) appendUserAgent ;
+
+/**
+ 全局配置WebView的UserAgent，会覆盖原UserAgent，不建议使用
+
+ @param userAgent 自定义内容
+ */
++ (void) configCustomGlobalUserAgentSync:(NSString *) userAgent ;
+
+/**
+ 配置单个WebView的UserAgent
+ 由于是异步执行的，需要在回调里面去调用加载网页的操作，注意循环引用
+
+ @param appendUserAgent 追加的自定义内容
+ @param handler 追加完成后的回调，在此回调加载URL
+ */
+- (void) configUserAgentAsync:(NSString *) appendUserAgent
+                  completionHandler:(void(^ _Nullable)(id _Nullable info, NSError * _Nullable error)) handler ;
+
+/**
+ 是WebView的长按手势失效
+ */
+- (void) invalidLongGesture ;
 - (void) clearCache ;
 - (BOOL) canGoBack ;
 - (void) goBack ;
