@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "LQWebView"
-  s.version      = "1.4.0"
+  s.version      = "1.3.2"
   s.summary      = "对WKWebView 的封装，继承自UIView"
   s.description  = <<-DESC
   对WKWebView 的封装，继承自UIView，封装了常用方法，方便使用！
@@ -29,14 +29,13 @@ Pod::Spec.new do |s|
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   # s.dependency "JSONKit", "~> 1.4"
 
-  s.default_subspec = 'LQ_OBJ'
-  
-  s.subspec 'LQ_OBJ' do |lq_obj|
-    lq_obj.source_files  = "LQWebView", "LQWebViewDemo/LQWebView/*.{h,m}"
-  end
+  s.source_files  = 'LQWebView/obj/*.{h,m}'
 
-  s.subspec 'SF' do |sf|
-    sf.source_files  = "LQWebView", "LQWebViewSwift/LQWebView/*.{swift}"
-  end
+  # s.default_subspec = 'OBJ'
+  
+  # s.subspec 'OBJ' do |obj|
+  #   obj.source_files  = 'LQWebView/obj/*.{h,m}'
+  # end
+
 
 end
