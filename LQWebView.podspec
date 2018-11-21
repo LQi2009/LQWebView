@@ -6,10 +6,11 @@
 #  To see working Podspecs in the CocoaPods repo see https://github.com/CocoaPods/Specs/
 #
 
+
 Pod::Spec.new do |s|
 
   s.name         = "LQWebView"
-  s.version      = "1.4.0"
+  s.version      = "1.5.0"
   s.summary      = "对WKWebView 的封装，继承自UIView"
   s.description  = <<-DESC
   对WKWebView 的封装，继承自UIView，封装了常用方法，方便使用！
@@ -29,11 +30,11 @@ Pod::Spec.new do |s|
   s.default_subspec = 'OBJ'
   
   s.subspec 'OBJ' do |obj|
-    obj.source_files  = "LQWebView", "LQWebView/obj/LQWebView/*.{h,m}"
+    obj.source_files  = "LQWebView", "LQWebView/obj/**/*.{h,m}"
   end
 
   s.subspec 'SF' do |sf|
-    sf.source_files  = "LQWebView", "LQWebView/sf/LQWebView/*.{swift}"
+    sf.source_files  = "LQWebView", "LQWebView/sf/**/*.{swift}"
     s.swift_version = "4.1"
   end
 
