@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "LQWebView"
-  s.version      = "1.3.3"
+  s.version      = "1.4.0"
   s.summary      = "对WKWebView 的封装，继承自UIView"
   s.description  = <<-DESC
   对WKWebView 的封装，继承自UIView，封装了常用方法，方便使用！
@@ -26,16 +26,15 @@ Pod::Spec.new do |s|
 
   s.requires_arc = true
 
-  # s.source_files  = "LQWebView", "LQWebView/obj/LQWebView/*.{h,m}"
-
   s.default_subspec = 'OBJ'
   
   s.subspec 'OBJ' do |obj|
-    obj.source_files  = "LQWebView", "LQWebView/obj/**/*.{h,m}"
+    obj.source_files  = "LQWebView", "LQWebView/obj/LQWebView/*.{h,m}"
   end
 
   s.subspec 'SF' do |sf|
-    sf.source_files  = "LQWebView", "LQWebView/sf/**/*.{swift}"
+    sf.source_files  = "LQWebView", "LQWebView/sf/LQWebView/*.{swift}"
+    s.swift_version = "4.1"
   end
 
 end

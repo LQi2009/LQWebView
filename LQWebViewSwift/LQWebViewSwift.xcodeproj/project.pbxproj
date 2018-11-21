@@ -16,7 +16,7 @@
 		D27B58A7214FAE5C001D05D0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D27B58A5214FAE5C001D05D0 /* LaunchScreen.storyboard */; };
 		D27B58B2214FAE5D001D05D0 /* LQWebViewSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27B58B1214FAE5D001D05D0 /* LQWebViewSwiftTests.swift */; };
 		D27B58BD214FAE5D001D05D0 /* LQWebViewSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27B58BC214FAE5D001D05D0 /* LQWebViewSwiftUITests.swift */; };
-		D2A1504F214FB02F0066B38F /* LQWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A1504E214FB02F0066B38F /* LQWebView.swift */; };
+		D2DA958221A50F4E00AB6329 /* LQWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DA958121A50F4E00AB6329 /* LQWebView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,7 +52,7 @@
 		D27B58B8214FAE5D001D05D0 /* LQWebViewSwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LQWebViewSwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D27B58BC214FAE5D001D05D0 /* LQWebViewSwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LQWebViewSwiftUITests.swift; sourceTree = "<group>"; };
 		D27B58BE214FAE5D001D05D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D2A1504E214FB02F0066B38F /* LQWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LQWebView.swift; sourceTree = "<group>"; };
+		D2DA958121A50F4E00AB6329 /* LQWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LQWebView.swift; path = ../../LQWebView/sf/LQWebView/LQWebView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,14 +80,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D23321B6219195620066D85D /* LQWebView */ = {
-			isa = PBXGroup;
-			children = (
-				D2A1504E214FB02F0066B38F /* LQWebView.swift */,
-			);
-			path = LQWebView;
-			sourceTree = "<group>";
-		};
 		D27B5890214FAE5A001D05D0 = {
 			isa = PBXGroup;
 			children = (
@@ -111,8 +103,8 @@
 		D27B589B214FAE5A001D05D0 /* LQWebViewSwift */ = {
 			isa = PBXGroup;
 			children = (
+				D2DA958121A50F4E00AB6329 /* LQWebView.swift */,
 				D25CF75C21A406D500A4C898 /* test.pdf */,
-				D23321B6219195620066D85D /* LQWebView */,
 				D27B589C214FAE5A001D05D0 /* AppDelegate.swift */,
 				D27B589E214FAE5A001D05D0 /* ViewController.swift */,
 				D260DA2D2154B083004F84C2 /* TestViewController.swift */,
@@ -274,8 +266,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2DA958221A50F4E00AB6329 /* LQWebView.swift in Sources */,
 				D27B589F214FAE5A001D05D0 /* ViewController.swift in Sources */,
-				D2A1504F214FB02F0066B38F /* LQWebView.swift in Sources */,
 				D260DA2E2154B083004F84C2 /* TestViewController.swift in Sources */,
 				D27B589D214FAE5A001D05D0 /* AppDelegate.swift in Sources */,
 			);
