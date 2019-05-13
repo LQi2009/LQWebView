@@ -224,7 +224,7 @@
     [self loadURL:url];
 }
 
-- (void) loadUrlString:(NSString *)urlStr params:(NSDictionary *)param {
+- (void) loadUrlString:(NSString *)urlStr params:(NSDictionary * _Nullable)param {
     
     if (param && param.count > 0) {
         
@@ -244,7 +244,7 @@
     [self loadURL:url];
 }
 
-- (void) loadURL:(NSURL *)url {
+- (void) loadURL:(NSURL *_Nullable)url {
     
     if (url == nil) {
         NSLog(@"url Error");
@@ -274,7 +274,7 @@
     [self loadURL:url];
 }
 
-- (void) loadLocalHTML:(NSString *) path withExtension:(NSString *)ext {
+- (void) loadLocalHTML:(NSString *) path withExtension:(NSString * _Nullable)ext {
     
     if (ext == nil) {
         ext = @"";
@@ -292,7 +292,7 @@
     [self loadLocalFile:file withExtension:nil];
 }
 
-- (void) loadLocalFile:(NSString *) file withExtension:(NSString *)ext {
+- (void) loadLocalFile:(NSString *) file withExtension:(NSString *_Nullable)ext {
     
     NSURL *url = [[NSBundle mainBundle] URLForResource:file withExtension:ext];
     
@@ -300,7 +300,9 @@
 }
 
 #pragma mark - ============= 添加需要执行的js方法 ==============
-- (void) addJavaScriptMethod:(NSString *)methodName param:(NSDictionary *)param completionHandler:(LQWebViewJavaScriptCompletionHandler) handler {
+- (void) addJavaScriptMethod:(NSString *)methodName
+                       param:(NSDictionary * _Nullable)param
+           completionHandler:(LQWebViewJavaScriptCompletionHandler) handler {
     
     LQJavaScriptItem *item = [[LQJavaScriptItem alloc]init];
     
@@ -311,7 +313,9 @@
     [self.javaScriptMethods setObject:item forKey:item.key];
 }
 
-- (void) addJavaScriptMethod:(NSString *)methodName params:(NSArray *) params completionHandler:(LQWebViewJavaScriptCompletionHandler) handler {
+- (void) addJavaScriptMethod:(NSString *)methodName
+                      params:(NSArray *_Nullable) params
+           completionHandler:(LQWebViewJavaScriptCompletionHandler) handler {
     
     NSMutableArray *objs = [NSMutableArray arrayWithCapacity:params.count];
     for (id obj in params) {
@@ -328,7 +332,8 @@
 }
 
 #pragma mark - ============= 添加需要执行的js ==================
-- (void) addJavaScript:(NSString *) js completionHandler:(LQWebViewJavaScriptCompletionHandler) handler {
+- (void) addJavaScript:(NSString *) js
+     completionHandler:(LQWebViewJavaScriptCompletionHandler) handler {
     
     LQJavaScriptItem *item = [[LQJavaScriptItem alloc]init];
     item.key = [self __md5Encode:js];
@@ -343,7 +348,9 @@
     [self.wkView.configuration.userContentController addUserScript:us];
 }
 
-- (void) runJavaScriptMethod:(NSString *) methodName param:(NSDictionary *)param completionHandler:(void (^ _Nullable)(_Nullable id info, NSError * _Nullable error))completionHandler {
+- (void) runJavaScriptMethod:(NSString *) methodName
+                       param:(NSDictionary *_Nullable)param
+           completionHandler:(void (^ _Nullable)(_Nullable id info, NSError * _Nullable error))completionHandler {
     
     NSString *json = [self __objToJson:param];
     
@@ -392,7 +399,10 @@
     [self.observers setObject:item forKey:item.key];
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary<NSKeyValueChangeKey,id> *)change
+                       context:(void *)context {
     
     NSString *key = [self __md5Encode:keyPath];
     LQJavaScriptItem *item = [self.observers objectForKey:key];

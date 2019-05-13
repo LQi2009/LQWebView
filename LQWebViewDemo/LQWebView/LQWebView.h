@@ -11,6 +11,8 @@
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  注入JS协议回调Block
 
@@ -22,7 +24,7 @@
  CGFloat progress = [num floatValue] ;
  `
  */
-typedef void(^LQWebViewScriptMessageHandler)(NSString *key, id info);
+typedef void(^LQWebViewScriptMessageHandler)(NSString * _Nonnull key, id _Nullable info);
 
 /**
  执行注入的JS方法回调Block
@@ -30,40 +32,41 @@ typedef void(^LQWebViewScriptMessageHandler)(NSString *key, id info);
  @param info 描述信息
  @param error 错误信息
  */
-typedef void(^LQWebViewJavaScriptCompletionHandler)(id info, NSError *error);
+typedef void(^LQWebViewJavaScriptCompletionHandler)(id _Nullable info, NSError * _Nullable error);
 @protocol LQWebViewDelegate ;
 @protocol LQWebViewUIDelegate ;
+
 @interface LQWebView : UIView
 
 /** WKWebView 可根据需要在外部设置一些属性 */
 @property (nonatomic, strong, readonly) WKWebView *webView;
 
 /** 代理 */
-@property (nonatomic, weak) id <LQWebViewDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id <LQWebViewDelegate> _Nullable delegate;
 
 /** 弹框代理, 用于替换JS的一些弹框提醒 */
-@property (nonatomic, weak) id <LQWebViewUIDelegate> uiDelegate;
+@property (nonatomic, weak) IBOutlet id <LQWebViewUIDelegate> _Nullable uiDelegate;
 
 /** 是否在销毁时清除缓存, 所有的缓存: web存储的数据/数据库/cookie等 */
-@property (nonatomic, assign) BOOL isAutoClearCache;
+@property (nonatomic, assign) IBInspectable BOOL isAutoClearCache;
 
 /** 是否正在加载网页 */
 @property (nonatomic, assign, readonly) BOOL isLoading;
 
 /** 是否允许播放网页内视频 */
-@property (nonatomic, assign) BOOL allowsInlineMediaPlay;
+@property (nonatomic, assign) IBInspectable BOOL allowsInlineMediaPlay;
 
 /** 是否使用手势滑动返回 */
-@property (nonatomic, assign) BOOL backGestureEnable;
+@property (nonatomic, assign) IBInspectable BOOL backGestureEnable;
 
 /** 加载时是否显示指示器, 默认为系统 UIActivityIndicatorView */
-@property (nonatomic, assign) BOOL isShowIndicator;
+@property (nonatomic, assign) IBInspectable BOOL isShowIndicator;
 
 /** 是否显示加载进度, 如果自己通过进度观察添加, 则不需要设置此属性 */
 @property (nonatomic, assign) BOOL isShowProgressIndicator;
 
 /** 是否显示状态栏左上角的网络指示器 */
-@property (nonatomic, assign) BOOL isShowNetIndicator;
+@property (nonatomic, assign) IBInspectable BOOL isShowNetIndicator;
 
 /** 加载进度条颜色, 如果设置此属性, 则自动设置 isShowProgressIndicator 为YES */
 @property (nonatomic, strong) UIColor * progressColor ;
@@ -91,10 +94,11 @@ typedef void(^LQWebViewJavaScriptCompletionHandler)(id info, NSError *error);
  @param handler 追加完成后的回调，在此回调加载URL
  */
 - (void) configUserAgentAsync:(NSString *) appendUserAgent
-                  completionHandler:(void(^ _Nullable)(id _Nullable info, NSError * _Nullable error)) handler ;
+
+            completionHandler:(void(^ _Nullable)(id _Nullable info, NSError * _Nullable error)) handler ;
 
 /**
- 是WebView的长按手势失效
+ 使WebView的长按手势失效
  */
 - (void) invalidLongGesture ;
 - (void) clearCache ;
@@ -117,8 +121,9 @@ typedef void(^LQWebViewJavaScriptCompletionHandler)(id info, NSError *error);
  @param urlStr URL地址
  @param param 参数（参数名称为key，参数内容为value）
  */
-- (void) loadUrlString:(NSString *)urlStr params:(NSDictionary *)param ;
-- (void) loadURL:(NSURL *)url ;
+- (void) loadUrlString:(NSString *)urlStr
+                params:(NSDictionary * _Nullable)param ;
+- (void) loadURL:(NSURL *_Nullable)url ;
 - (void) loadRequest:(NSURLRequest *) req ;
 
 #pragma mark - ============= 加载本地文件 ========================
@@ -135,7 +140,8 @@ typedef void(^LQWebViewJavaScriptCompletionHandler)(id info, NSError *error);
  @param path 文件在文件夹内的相对路径（包含文件夹名称）
  @param ext 扩展字段，比如链接中拼接的子路径/参数等
  */
-- (void) loadLocalHTML:(NSString *) path withExtension:(NSString *)ext ;
+- (void) loadLocalHTML:(NSString *) path
+         withExtension:(NSString * _Nullable)ext ;
 
 /**
  加载本地文件(pdf/excel/world/图片等)
@@ -143,7 +149,9 @@ typedef void(^LQWebViewJavaScriptCompletionHandler)(id info, NSError *error);
  @param file 文件名称
  @param ext 扩展字段，比如,后缀名称, 如果名称含后缀, 可传nil
  */
-- (void) loadLocalFile:(NSString *) file withExtension:(NSString *)ext ;
+- (void) loadLocalFile:(NSString *) file
+         withExtension:(NSString *_Nullable)ext ;
+
 - (void) loadLocalFile:(NSString *) file ;
 
 #pragma mark - ============= 添加需要执行的js方法 ==============
@@ -154,7 +162,9 @@ typedef void(^LQWebViewJavaScriptCompletionHandler)(id info, NSError *error);
  @param param 参数（会转换为Json传递）
  @param handler 回调结果
  */
-- (void) addJavaScriptMethod:(NSString *)methodName param:(NSDictionary *)param completionHandler:(LQWebViewJavaScriptCompletionHandler) handler ;
+- (void) addJavaScriptMethod:(NSString *)methodName
+                       param:(NSDictionary *_Nullable)param
+           completionHandler:(LQWebViewJavaScriptCompletionHandler) handler ;
 
 /**
  添加需要执行的JS方法
@@ -164,7 +174,9 @@ typedef void(^LQWebViewJavaScriptCompletionHandler)(id info, NSError *error);
  @param params 多个参数（参数值）
  @param handler 回调结果
  */
-- (void) addJavaScriptMethod:(NSString *)methodName params:(NSArray *) params completionHandler:(LQWebViewJavaScriptCompletionHandler) handler ;
+- (void) addJavaScriptMethod:(NSString *)methodName
+                      params:(NSArray *_Nullable) params
+           completionHandler:(LQWebViewJavaScriptCompletionHandler) handler ;
 
 /**
  添加需要执行的JS代码
@@ -172,7 +184,9 @@ typedef void(^LQWebViewJavaScriptCompletionHandler)(id info, NSError *error);
  @param js js 代码
  @param handler 回调结果
  */
-- (void) addJavaScript:(NSString *) js completionHandler:(LQWebViewJavaScriptCompletionHandler) handler ;
+- (void) addJavaScript:(NSString *) js
+     completionHandler:(LQWebViewJavaScriptCompletionHandler) handler ;
+
 - (void) addUserScript:(NSString *)js ;
 
 // 以上方法都是在加载WebView完成的同时执行的JavaScript方法，如果在页面加载后某个时机想要执行js方法，可使用下面的方法
@@ -185,7 +199,9 @@ typedef void(^LQWebViewJavaScriptCompletionHandler)(id info, NSError *error);
  @param param 参数（会转换为Json传递）
  @param handler 执行后的回调
  */
-- (void) runJavaScriptMethod:(NSString *) methodName param:(NSDictionary *)param completionHandler:(LQWebViewJavaScriptCompletionHandler) handler ;
+- (void) runJavaScriptMethod:(NSString *) methodName
+                       param:(NSDictionary *_Nullable)param
+           completionHandler:(void (^ _Nullable)(_Nullable id info, NSError * _Nullable error)) handler ;
 
 #pragma mark - ============= 添加观察者 ===========================
 /**
@@ -194,7 +210,8 @@ typedef void(^LQWebViewJavaScriptCompletionHandler)(id info, NSError *error);
  @param keyPath 待观察的属性名称
  @param handler 回调
  */
-- (void) addWebViewObserverForKeyPath:(NSString *) keyPath handler:(LQWebViewScriptMessageHandler) handler ;
+- (void) addWebViewObserverForKeyPath:(NSString *) keyPath
+                              handler:(LQWebViewScriptMessageHandler) handler ;
 - (void) addProgressObserverWithHandler:(LQWebViewScriptMessageHandler) handler ;
 - (void) addTitleObserverWithHandler:(LQWebViewScriptMessageHandler) handler ;
 
@@ -208,6 +225,7 @@ typedef void(^LQWebViewJavaScriptCompletionHandler)(id info, NSError *error);
 - (void) addScriptMessageHandler:(NSString *)name handler:(LQWebViewScriptMessageHandler) handler ;
 @end
 
+
 @protocol LQWebViewDelegate <NSObject>
 
 @optional
@@ -215,7 +233,8 @@ typedef void(^LQWebViewJavaScriptCompletionHandler)(id info, NSError *error);
 
 - (void) webViewLoadSuccess:(LQWebView *) webView ;
 
-- (void) webView:(LQWebView *) webView loadFailed:(NSError *) error ;
+- (void) webView:(LQWebView *) webView
+      loadFailed:(NSError *_Nullable) error ;
 
 /** 需要验证服务/证书时调用, 例如HTTPS
  `
@@ -227,7 +246,8 @@ typedef void(^LQWebViewJavaScriptCompletionHandler)(id info, NSError *error);
  }
  `
  */
-- (void) webView:(LQWebView *) webView authenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+- (void) webView:(LQWebView *) webView
+authenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *__nullable credential))completionHandler ;
 
 @end
@@ -245,7 +265,9 @@ completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NS
  @param msg 提示信息
  @param completionHandler 警告框消失的时候调用, 回调给JS
  */
-- (void) webView:(LQWebView *) webView alertJSMessage:(NSString *) msg completionHandler:(void (^)(void))completionHandler ;
+- (void) webView:(LQWebView *) webView
+  alertJSMessage:(NSString *_Nullable) msg
+completionHandler:(void (^)(void))completionHandler ;
 
 /** 对应js的confirm方法
  webView中弹出选择框时调用, 两个按钮
@@ -254,7 +276,9 @@ completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NS
  @param msg 提示信息
  @param completionHandler 确认框消失的时候调用, 回调给JS, 参数为选择结果: YES or NO
  */
-- (void) webView:(LQWebView *) webView confirmJSMessage:(NSString *) msg completionHandler:(void (^)(BOOL result))completionHandler ;
+- (void) webView:(LQWebView *) webView
+confirmJSMessage:(NSString *_Nullable) msg
+completionHandler:(void (^)(BOOL result))completionHandler ;
 
 /** 对应js的prompt方法
  webView中弹出输入框时调用, 两个按钮 和 一个输入框
@@ -264,6 +288,11 @@ completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NS
  @param defaultText 默认提示文本
  @param completionHandler 输入框消失的时候调用, 回调给JS, 参数为输入的内容
  */
-- (void) webView:(LQWebView *) webView textInputJSMessage:(NSString *) msg defaultText:(nullable NSString *)defaultText completionHandler:(void (^)(NSString * _Nullable result))completionHandler ;
+- (void) webView:(LQWebView *) webView
+textInputJSMessage:(NSString *_Nullable) msg
+     defaultText:(nullable NSString *)defaultText
+completionHandler:(void (^)(NSString * _Nullable result))completionHandler ;
 
 @end
+
+NS_ASSUME_NONNULL_END
