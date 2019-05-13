@@ -11,6 +11,11 @@
 pod 'LQWebView'
 ```
 
+Swift版本
+```
+pod 'LQWebView/SF'
+```
+
 # 使用
 使用简单，只需要创建/添加到视图即可：
 ```
