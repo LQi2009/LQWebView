@@ -125,6 +125,13 @@
     }];
 }
 
+- (void) clearBackForwardList {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+    [self.wkView.backForwardList performSelector:NSSelectorFromString(@"_removeAllItems")];
+#pragma clang diagnostic pop
+}
+
 -(WKWebView *)webView {
     
     return _wkView;

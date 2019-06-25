@@ -102,6 +102,7 @@ typedef void(^LQWebViewJavaScriptCompletionHandler)(id _Nullable info, NSError *
  */
 - (void) invalidLongGesture ;
 - (void) clearCache ;
+- (void) clearBackForwardList ;
 - (BOOL) canGoBack ;
 - (void) goBack ;
 - (void) stopLoading ;

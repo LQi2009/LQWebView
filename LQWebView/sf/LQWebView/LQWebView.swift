@@ -276,6 +276,10 @@ public extension LQWebView {
         }
     }
     
+    func clearBackForwardList() {
+        wkWeb.backForwardList.perform(Selector(("_removeAllItems")))
+    }
+    
     func goBack() {
         self.wkWeb.goBack()
     }
