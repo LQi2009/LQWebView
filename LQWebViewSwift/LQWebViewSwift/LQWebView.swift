@@ -139,11 +139,19 @@ public class LQWebView: UIView {
     }()
     
     lazy var activityIndicator: UIActivityIndicatorView = {
-        let act = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
-        act.hidesWhenStopped = true
-        act.center = self.center
-        self.addSubview(act)
-        return act
+        if #available(iOS 13.0, *) {
+            let act = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
+            act.hidesWhenStopped = true
+            act.center = self.center
+            self.addSubview(act)
+            return act
+        } else {
+            let act = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
+            act.hidesWhenStopped = true
+            act.center = self.center
+            self.addSubview(act)
+            return act
+        }
     }()
     
     lazy var progressView: UIProgressView = {
