@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3D4D16A124AC16FA00DF8D27 /* LQWebView+Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D4D16A024AC16FA00DF8D27 /* LQWebView+Tools.m */; };
+		3D66C6D424B07E5F00192191 /* LQWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D66C6D324B07E5F00192191 /* LQWebView.m */; };
+		3D66C6D724B07E8C00192191 /* LQWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66C6D624B07E8C00192191 /* LQWebView.swift */; };
 		D23FCF8B2123E1FB002971CF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D23FCF8A2123E1FB002971CF /* AppDelegate.m */; };
 		D23FCF8E2123E1FB002971CF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D23FCF8D2123E1FB002971CF /* ViewController.m */; };
 		D23FCF912123E1FB002971CF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D23FCF8F2123E1FB002971CF /* Main.storyboard */; };
@@ -16,7 +18,6 @@
 		D23FCF992123E1FD002971CF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D23FCF982123E1FD002971CF /* main.m */; };
 		D23FCFA32123E1FD002971CF /* LQWebViewDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D23FCFA22123E1FD002971CF /* LQWebViewDemoTests.m */; };
 		D23FCFAE2123E1FD002971CF /* LQWebViewDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D23FCFAD2123E1FD002971CF /* LQWebViewDemoUITests.m */; };
-		D23FCFBE2123E217002971CF /* LQWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = D23FCFBD2123E217002971CF /* LQWebView.m */; };
 		D23FCFC321242B29002971CF /* LQWebTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D23FCFC221242B29002971CF /* LQWebTestViewController.m */; };
 		D289A7EC214757F5002D1F19 /* test.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D289A7EB214757F5002D1F19 /* test.pdf */; };
 /* End PBXBuildFile section */
@@ -41,6 +42,10 @@
 /* Begin PBXFileReference section */
 		3D4D169F24AC16FA00DF8D27 /* LQWebView+Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LQWebView+Tools.h"; sourceTree = "<group>"; };
 		3D4D16A024AC16FA00DF8D27 /* LQWebView+Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LQWebView+Tools.m"; sourceTree = "<group>"; };
+		3D66C6D224B07E5F00192191 /* LQWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LQWebView.h; sourceTree = "<group>"; };
+		3D66C6D324B07E5F00192191 /* LQWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LQWebView.m; sourceTree = "<group>"; };
+		3D66C6D624B07E8C00192191 /* LQWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LQWebView.swift; path = LQWebView/sf/LQWebView/LQWebView.swift; sourceTree = SOURCE_ROOT; };
+		3D66C6D924B07F0900192191 /* LQWebViewDemo-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LQWebViewDemo-Bridging-Header.h"; sourceTree = "<group>"; };
 		D23FCF862123E1FB002971CF /* LQWebViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LQWebViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D23FCF892123E1FB002971CF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		D23FCF8A2123E1FB002971CF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -57,8 +62,6 @@
 		D23FCFA92123E1FD002971CF /* LQWebViewDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LQWebViewDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D23FCFAD2123E1FD002971CF /* LQWebViewDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LQWebViewDemoUITests.m; sourceTree = "<group>"; };
 		D23FCFAF2123E1FD002971CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D23FCFBC2123E217002971CF /* LQWebView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LQWebView.h; sourceTree = "<group>"; };
-		D23FCFBD2123E217002971CF /* LQWebView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LQWebView.m; sourceTree = "<group>"; };
 		D23FCFC121242B29002971CF /* LQWebTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LQWebTestViewController.h; sourceTree = "<group>"; };
 		D23FCFC221242B29002971CF /* LQWebTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LQWebTestViewController.m; sourceTree = "<group>"; };
 		D289A7EB214757F5002D1F19 /* test.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = test.pdf; sourceTree = "<group>"; };
@@ -89,6 +92,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3D66C6D124B07E5F00192191 /* LQWebView */ = {
+			isa = PBXGroup;
+			children = (
+				3D66C6D624B07E8C00192191 /* LQWebView.swift */,
+				3D66C6D224B07E5F00192191 /* LQWebView.h */,
+				3D66C6D324B07E5F00192191 /* LQWebView.m */,
+			);
+			name = LQWebView;
+			path = LQWebView/obj/LQWebView;
+			sourceTree = SOURCE_ROOT;
+		};
 		D23FCF7D2123E1FB002971CF = {
 			isa = PBXGroup;
 			children = (
@@ -120,6 +134,7 @@
 				D23FCF8D2123E1FB002971CF /* ViewController.m */,
 				D23FCFC121242B29002971CF /* LQWebTestViewController.h */,
 				D23FCFC221242B29002971CF /* LQWebTestViewController.m */,
+				3D66C6D924B07F0900192191 /* LQWebViewDemo-Bridging-Header.h */,
 				D23FCF8F2123E1FB002971CF /* Main.storyboard */,
 				D23FCF922123E1FD002971CF /* Assets.xcassets */,
 				D23FCF942123E1FD002971CF /* LaunchScreen.storyboard */,
@@ -150,8 +165,7 @@
 		D23FCFBB2123E206002971CF /* LQWebView */ = {
 			isa = PBXGroup;
 			children = (
-				D23FCFBC2123E217002971CF /* LQWebView.h */,
-				D23FCFBD2123E217002971CF /* LQWebView.m */,
+				3D66C6D124B07E5F00192191 /* LQWebView */,
 				3D4D169F24AC16FA00DF8D27 /* LQWebView+Tools.h */,
 				3D4D16A024AC16FA00DF8D27 /* LQWebView+Tools.m */,
 			);
@@ -225,6 +239,7 @@
 				TargetAttributes = {
 					D23FCF852123E1FB002971CF = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1150;
 					};
 					D23FCF9D2123E1FD002971CF = {
 						CreatedOnToolsVersion = 9.4.1;
@@ -289,9 +304,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D66C6D724B07E8C00192191 /* LQWebView.swift in Sources */,
+				3D66C6D424B07E5F00192191 /* LQWebView.m in Sources */,
 				3D4D16A124AC16FA00DF8D27 /* LQWebView+Tools.m in Sources */,
 				D23FCFC321242B29002971CF /* LQWebTestViewController.m in Sources */,
-				D23FCFBE2123E217002971CF /* LQWebView.m in Sources */,
 				D23FCF8E2123E1FB002971CF /* ViewController.m in Sources */,
 				D23FCF992123E1FD002971CF /* main.m in Sources */,
 				D23FCF8B2123E1FB002971CF /* AppDelegate.m in Sources */,
@@ -463,6 +479,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M5AQP3WXJE;
 				INFOPLIST_FILE = LQWebViewDemo/Info.plist;
@@ -474,6 +491,9 @@
 				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ldshare.LQWebViewDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "LQWebViewDemo/LQWebViewDemo-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -482,6 +502,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M5AQP3WXJE;
 				INFOPLIST_FILE = LQWebViewDemo/Info.plist;
@@ -493,6 +514,8 @@
 				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ldshare.LQWebViewDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "LQWebViewDemo/LQWebViewDemo-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -500,6 +523,7 @@
 		D23FCFB62123E1FD002971CF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M5AQP3WXJE;
@@ -519,6 +543,7 @@
 		D23FCFB72123E1FD002971CF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M5AQP3WXJE;
@@ -538,6 +563,7 @@
 		D23FCFB92123E1FD002971CF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M5AQP3WXJE;
 				INFOPLIST_FILE = LQWebViewDemoUITests/Info.plist;
@@ -556,6 +582,7 @@
 		D23FCFBA2123E1FD002971CF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M5AQP3WXJE;
 				INFOPLIST_FILE = LQWebViewDemoUITests/Info.plist;
