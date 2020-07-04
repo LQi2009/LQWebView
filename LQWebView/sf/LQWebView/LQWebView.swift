@@ -288,6 +288,16 @@ public extension LQWebView {
     }
 
 //    MARK: - ============= 加载本地文件 ========================
+    func loadHTMLString(_ html: String, baseURL: String? = nil) {
+        
+        var url: URL? = nil
+        
+        if let base = baseURL {
+            url = URL(string: base)
+        }
+        self.wkWeb.loadHTMLString(html, baseURL: url)
+    }
+    
     func loadLocalHTML(_ file: String) {
         
         var url: URL!
