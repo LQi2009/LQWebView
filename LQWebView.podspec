@@ -10,7 +10,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "LQWebView"
-  s.version      = "1.6.0"
+  s.version      = "1.5.6"
   s.summary      = "对WKWebView 的封装，继承自UIView"
   s.description  = <<-DESC
   对WKWebView 的封装，继承自UIView，封装了常用方法，方便使用！
@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.license      = "MIT"
   s.author             = { "LiuQiqiang" => "lqq200912408@163.com" }
 
-  s.platform     = :ios, "11.0"
+  s.platform     = :ios, "10.0"
 
   s.source       = { :git => "https://github.com/LQi2009/LQWebView.git", :tag => "#{s.version}" }
 
