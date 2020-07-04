@@ -10,7 +10,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "LQWebView"
-  s.version      = "1.6"
+  s.version      = "1.6.0"
   s.summary      = "对WKWebView 的封装，继承自UIView"
   s.description  = <<-DESC
   对WKWebView 的封装，继承自UIView，封装了常用方法，方便使用！
