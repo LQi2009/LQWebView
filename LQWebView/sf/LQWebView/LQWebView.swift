@@ -139,6 +139,7 @@ public class LQWebView: UIView {
     }()
     
     lazy var activityIndicator: UIActivityIndicatorView = {
+        
         if #available(iOS 13.0, *) {
             let act = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
             act.hidesWhenStopped = true

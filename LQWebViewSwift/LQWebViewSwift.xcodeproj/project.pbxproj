@@ -15,8 +15,8 @@
 		3D66C6A824B0440000192191 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D66C6A624B0440000192191 /* LaunchScreen.storyboard */; };
 		3D66C6B324B0440000192191 /* LQWebViewSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66C6B224B0440000192191 /* LQWebViewSwiftTests.swift */; };
 		3D66C6BE24B0440100192191 /* LQWebViewSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66C6BD24B0440100192191 /* LQWebViewSwiftUITests.swift */; };
-		3D66C6CC24B0443100192191 /* LQWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66C6CB24B0443000192191 /* LQWebView.swift */; };
 		3D66C6CE24B0443E00192191 /* test.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 3D66C6CD24B0443E00192191 /* test.pdf */; };
+		3D66C6D024B0776F00192191 /* LQWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66C6CF24B0776F00192191 /* LQWebView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,8 +51,8 @@
 		3D66C6B924B0440000192191 /* LQWebViewSwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LQWebViewSwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D66C6BD24B0440100192191 /* LQWebViewSwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LQWebViewSwiftUITests.swift; sourceTree = "<group>"; };
 		3D66C6BF24B0440100192191 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3D66C6CB24B0443000192191 /* LQWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LQWebView.swift; sourceTree = "<group>"; };
 		3D66C6CD24B0443E00192191 /* test.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = test.pdf; sourceTree = "<group>"; };
+		3D66C6CF24B0776F00192191 /* LQWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LQWebView.swift; path = ../../LQWebView/sf/LQWebView/LQWebView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,8 +103,8 @@
 		3D66C69A24B043FC00192191 /* LQWebViewSwift */ = {
 			isa = PBXGroup;
 			children = (
+				3D66C6CF24B0776F00192191 /* LQWebView.swift */,
 				3D66C6CD24B0443E00192191 /* test.pdf */,
-				3D66C6CB24B0443000192191 /* LQWebView.swift */,
 				3D66C69B24B043FC00192191 /* AppDelegate.swift */,
 				3D66C69D24B043FC00192191 /* SceneDelegate.swift */,
 				3D66C69F24B043FC00192191 /* ViewController.swift */,
@@ -266,7 +266,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D66C6CC24B0443100192191 /* LQWebView.swift in Sources */,
+				3D66C6D024B0776F00192191 /* LQWebView.swift in Sources */,
 				3D66C6A024B043FC00192191 /* ViewController.swift in Sources */,
 				3D66C69C24B043FC00192191 /* AppDelegate.swift in Sources */,
 				3D66C69E24B043FC00192191 /* SceneDelegate.swift in Sources */,
