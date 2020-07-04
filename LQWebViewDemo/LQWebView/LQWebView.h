@@ -71,13 +71,8 @@ typedef void(^LQWebViewJavaScriptCompletionHandler)(id _Nullable info, NSError *
 /** 加载进度条颜色, 如果设置此属性, 则自动设置 isShowProgressIndicator 为YES */
 @property (nonatomic, strong) UIColor * progressColor ;
 
-/**
- 全局配置WebView的UserAgent，会在原UserAgent后追加自定义内容
- 同步执行的，调用之后就会起效果，内部使用的是UIWebView
-
- @param appendUserAgent 需要追加在UserAgent的自定义内容
- */
-+ (void) configGlobalUserAgentSync:(NSString *) appendUserAgent ;
+/// 加载超时时间，默认 30s
+@property (nonatomic, assign) NSTimeInterval timeoutInterval;
 
 /**
  全局配置WebView的UserAgent，会覆盖原UserAgent，不建议使用
@@ -119,15 +114,24 @@ typedef void(^LQWebViewJavaScriptCompletionHandler)(id _Nullable info, NSError *
 /**
  加载网络URL（带参数），拼接在URL后
 
- @param urlStr URL地址
+ @param urlString URL地址
  @param param 参数（参数名称为key，参数内容为value）
  */
-- (void) loadUrlString:(NSString *)urlStr
+- (void) loadUrlString:(NSString *)urlString
                 params:(NSDictionary * _Nullable)param ;
 - (void) loadURL:(NSURL *_Nullable)url ;
 - (void) loadRequest:(NSURLRequest *) req ;
 
 #pragma mark - ============= 加载本地文件 ========================
+
+/// 加载HTML字符串
+/// @param html HTML字符串
+/// @param base 如果HTML字符串中含有网络地址，例如网络图片等；
+/// 如果该地址为相对地址，可在这里传入host，用来获取完整地址；
+/// 没有的话就传nil，或者直接使用下面的方法
+- (void) loadHTMLString:(NSString *) html baseURL:(NSString * _Nullable) base ;
+- (void) loadHTMLString:(NSString *) html;
+
 /**
  加载本地HTML文件
  
@@ -296,4 +300,9 @@ completionHandler:(void (^)(NSString * _Nullable result))completionHandler ;
 
 @end
 
+
+
+//@implementation LQWebView (Tools)
+//
+//@end
 NS_ASSUME_NONNULL_END

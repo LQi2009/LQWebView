@@ -9,33 +9,37 @@
 #import "LQWebTestViewController.h"
 #import "LQWebView.h"
 
-@interface LQWebTestViewController ()
+@interface LQWebTestViewController ()<LQWebViewDelegate>
 
 @end
 
 @implementation LQWebTestViewController
-
+- (void)webViewLoadSuccess:(LQWebView *)webView {
+    
+    sleep(2);
+    NSURL *url = [NSURL URLWithString:@"https://www.meipian3.cn/2she2g2v?first_share_to=singlemessage&first_share_uid=39887708&from=singlemessage&share_depth=1&share_from=self&share_user_mpuuid=a493de8ea1d4324f416cbc2e85107409&user_id=39887708&utm_medium=meipian_android&utm_source=singlemessage&uuid=45a3951fe4e1d06d395c95f9df1d0424"];
+//https://www.meipian3.cn/2she2g2v?first_share_to=singlemessage&first_share_uid=39887708&from=singlemessage&share_depth=1&share_from=self&share_user_mpuuid=a493de8ea1d4324f416cbc2e85107409&user_id=39887708&utm_medium=meipian_android&utm_source=singlemessage&uuid=45a3951fe4e1d06d395c95f9df1d0424
+    [webView loadURL:url];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     LQWebView *web = [[LQWebView alloc]initWithFrame:self.view.bounds];
+    web.delegate = self;
     [self.view addSubview:web];
     
-    [web loadLocalFile:@"test.pdf"];
-//    [web loadURLString:@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531415247542&di=2f753b5f3b5497a978171bbceb97b2a8&imgtype=0&src=http%3A%2F%2Fimg5.zdface.com%2F006yCHQygy1fji19zzsljj30m80etdgu.jpg"];
-//    [web loadLocalFile:@"test.xlsx"];
-//    [web loadLocalFilePath:@"test.xlsx" withExtension:nil];
-//    [web loadURLString:@"http://www.baidu.com"];
-//
-//    [web addTitleObserverWithHandler:^(NSString *key, id info) {
-//        NSLog(@"title : %@", info);
-//    }];
-//
-//    [web addProgressObserverWithHandler:^(NSString *key, id info) {
-////        CGFloat progress = (CGFloat)info;
-//        NSLog(@"progress: %@", info);
-//    }];
+//    NSURL *url = [NSURL URLWithString:@""];
+    NSURL *url = [NSURL URLWithString:@"http://115.182.9.47:81//0/private/283/你干嘛你干嘛你干嘛你你干嘛你干嘛/文章.doc"];
     
+    if (self.url) {
+        [web loadURL:url];
+    } else if (self.fileName) {
+        [web loadLocalFile:self.fileName];
+    } else if (self.html) {
+        [web loadHTMLString:self.html baseURL:@"http://i0.hdslb.com"];
+    } else {
+        [web loadURLString:self.urlStrig];
+    }
     web.isShowProgressIndicator = YES;
 //    web.progressColor = [UIColor redColor];
     

@@ -95,14 +95,6 @@ public class LQWebView: UIView {
     public var isAutoClearCache: Bool = false
     public var isShowNetIndicator: Bool = true
     public var isAuthChallenge: Bool = true
-    public var isLoading: Bool {
-        
-        return self.wkWeb.isLoading
-    }
-    
-    public var canGoBack: Bool {
-        return self.wkWeb.canGoBack
-    }
     
     public var allowsInlineMediaPlay: Bool = true {
         didSet {
@@ -132,7 +124,7 @@ public class LQWebView: UIView {
     }
     
     
-    private lazy var wkWeb: WKWebView = {
+    lazy var wkWeb: WKWebView = {
         
         let user = WKUserContentController()
         let config = WKWebViewConfiguration()
@@ -146,7 +138,7 @@ public class LQWebView: UIView {
         return web
     }()
     
-    private lazy var activityIndicator: UIActivityIndicatorView = {
+    lazy var activityIndicator: UIActivityIndicatorView = {
         let act = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
         act.hidesWhenStopped = true
         act.center = self.center
@@ -154,16 +146,26 @@ public class LQWebView: UIView {
         return act
     }()
     
-    private lazy var progressView: UIProgressView = {
+    lazy var progressView: UIProgressView = {
         let progress = UIProgressView(progressViewStyle: UIProgressViewStyle.default)
         progress.trackTintColor = self.backgroundColor
         self.addSubview(progress)
         return progress
     }()
 
-    private var messageHandlers: [String: LQJavaScriptItem] = [:]
-    private var javaScriptMethods: [String: LQJavaScriptItem] = [:]
-    private var observers: [String: LQJavaScriptItem] = [:]
+    var messageHandlers: [String: LQJavaScriptItem] = [:]
+    var javaScriptMethods: [String: LQJavaScriptItem] = [:]
+    var observers: [String: LQJavaScriptItem] = [:]
+    
+    
+    var isLoading: Bool {
+        
+        return self.wkWeb.isLoading
+    }
+    
+    var canGoBack: Bool {
+        return self.wkWeb.canGoBack
+    }
     
     override public func layoutSubviews() {
         super.layoutSubviews()
@@ -213,58 +215,6 @@ public class LQWebView: UIView {
 // MARK - Public methods
 public extension LQWebView {
     
-    /// 异步配置某个webView的UserAgent，使用的是WKWebView的方法
-    ///
-    /// - Parameters:
-    ///   - appendUserAgent: 追加的UserAgent字符串
-    ///   - handler: 在该回调方法里加载网页
-    func configUserAgentAsync(_ appendUserAgent: String, completionHandler handler: @escaping ((_ info: Any?, _ error: Error?) -> Void)) {
-        
-        self.wkWeb.evaluateJavaScript("navigator.userAgent") { (info, error) in
-            if let oldAgent = info as? String {
-                if oldAgent.hasSuffix(appendUserAgent) {
-                    handler(info, error)
-                } else {
-                    let agent = oldAgent + appendUserAgent
-                    let dic = ["UserAgent": agent]
-                    UserDefaults.standard.register(defaults: dic)
-                    UserDefaults.standard.synchronize()
-                }
-            }
-        }
-    }
-    
-    /// 配置全局的UserAgent，使用的是UIWebView的方法，该方法是同步执行的
-    ///
-    /// - Parameter apendUserAgent: 追加的UserAgent字符串
-    class func configGlobalUserAgentSync(_ apendUserAgent: String) {
-        
-        var agent = apendUserAgent
-        
-        if let oldAgent = UIWebView().stringByEvaluatingJavaScript(from: "navigator.userAgent") {
-            if oldAgent.hasSuffix(apendUserAgent) {
-                return
-            }
-            
-            agent = oldAgent + agent
-        }
-        
-        let dic = ["UserAgent": agent]
-        UserDefaults.standard.register(defaults: dic)
-        UserDefaults.standard.synchronize()
-        
-    }
-    
-    /// 配置全局自定义 UserAgent，会覆盖WebView原有的UserAgent
-    ///
-    /// - Parameter userAgent: 自定义UserAgent
-    class func configCustomGlobalUserAgentSync(_ userAgent: String) {
-        
-        let dic = ["UserAgent": userAgent]
-        UserDefaults.standard.register(defaults: dic)
-        UserDefaults.standard.synchronize()
-    }
-    
     func clearCache() {
         
         let types = WKWebsiteDataStore.allWebsiteDataTypes()
@@ -274,10 +224,6 @@ public extension LQWebView {
         WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: date) {
             print("WKWebView clear")
         }
-    }
-    
-    func clearBackForwardList() {
-        wkWeb.backForwardList.perform(Selector(("_removeAllItems")))
     }
     
     func goBack() {
@@ -607,7 +553,7 @@ extension LQWebView: WKUIDelegate {
 
 extension LQWebView {
     
-    private func resetIndicatorState(_ isShow: Bool) {
+    func resetIndicatorState(_ isShow: Bool) {
         
         if isShow {
             if self.isShowIndicator {
@@ -639,7 +585,7 @@ extension LQWebView {
         }
     }
     
-    private func objToJSON(_ obj: Any) -> String? {
+    func objToJSON(_ obj: Any) -> String? {
         
         if let obj = obj as? String {
             
@@ -658,7 +604,7 @@ extension LQWebView {
 }
 
 //MARK: - ========= 存储一些方法参数模型 =========
-private struct LQJavaScriptItem {
+struct LQJavaScriptItem {
     var key: String = ""
     var jsonString: String?
     var methodName: String?

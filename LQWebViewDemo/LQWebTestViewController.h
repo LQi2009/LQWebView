@@ -10,4 +10,8 @@
 
 @interface LQWebTestViewController : UIViewController
 
+@property (nonatomic, copy) NSString *urlStrig;
+@property (nonatomic, copy) NSString *fileName;
+@property (nonatomic, copy) NSString *html;
+@property (nonatomic, strong) NSURL *url;
 @end

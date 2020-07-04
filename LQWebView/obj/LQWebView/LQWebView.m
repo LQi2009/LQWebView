@@ -10,6 +10,7 @@
 
 #import "LQWebView.h"
 #import <CommonCrypto/CommonCrypto.h>
+#import "LQWebView+Tools.h"
 
 #pragma mark - ==== 避免直接使用WKScriptMessageHandler引起循环引用 ====
 @interface LQScriptMessageHandler : NSObject <WKScriptMessageHandler>
@@ -67,7 +68,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
+        self.timeoutInterval = 30.0;
     }
     return self;
 }
@@ -94,20 +95,6 @@
     }];
 }
 
-+ (void) configGlobalUserAgentSync:(NSString *) appendUserAgent {
-    
-    NSString *oldAgent = [[[UIWebView alloc]init] stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
-    
-    if ([oldAgent hasSuffix:appendUserAgent]) {
-        return ;
-    }
-    
-    NSString *newAgent = [NSString stringWithFormat:@"%@%@", oldAgent, appendUserAgent];
-    NSDictionary *dic = @{@"UserAgent": newAgent};
-    [[NSUserDefaults standardUserDefaults] registerDefaults:dic];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
 + (void) configCustomGlobalUserAgentSync:(NSString *) userAgent {
     
     NSDictionary *dic = @{@"UserAgent": userAgent};
@@ -123,6 +110,13 @@
         // Done
         NSLog(@"清除缓存");
     }];
+}
+
+- (void) clearBackForwardList {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+    [self.wkView.backForwardList performSelector:NSSelectorFromString(@"_removeAllItems")];
+#pragma clang diagnostic pop
 }
 
 -(WKWebView *)webView {
@@ -218,13 +212,21 @@
     self.wkView.UIDelegate = self ;
 }
 
+- (void) loadDataFromUrlString:(NSString *)urlString {
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSData *data = [NSData dataWithContentsOfURL:url];
+    
+    [self.webView loadData:data MIMEType:@"text/*" characterEncodingName:@"UTF-8" baseURL:url];
+}
+
 #pragma mark - ============= 加载网络URL ====================
 - (void) loadURLString:(NSString *)urlString {
+    urlString = [self encodeURL:urlString];
     NSURL *url = [NSURL URLWithString:urlString];
     [self loadURL:url];
 }
 
-- (void) loadUrlString:(NSString *)urlStr params:(NSDictionary *)param {
+- (void) loadUrlString:(NSString *)urlString params:(NSDictionary * _Nullable)param {
     
     if (param && param.count > 0) {
         
@@ -237,21 +239,22 @@
             }
         }
         
-        urlStr = [NSString stringWithFormat:@"%@?%@", urlStr, paramStr];
+        urlString = [NSString stringWithFormat:@"%@?%@", urlString, paramStr];
     }
     
-    NSURL *url = [NSURL URLWithString:urlStr];
+    urlString = [self encodeURL:urlString];
+    NSURL *url = [NSURL URLWithString:urlString];
     [self loadURL:url];
 }
 
-- (void) loadURL:(NSURL *)url {
+- (void) loadURL:(NSURL *_Nullable)url {
     
     if (url == nil) {
         NSLog(@"url Error");
         return;
     }
     
-    NSURLRequest *req = [NSURLRequest requestWithURL:url];
+    NSURLRequest *req = [NSURLRequest requestWithURL:url cachePolicy:(NSURLRequestUseProtocolCachePolicy) timeoutInterval:self.timeoutInterval];
     [self loadRequest:req];
 }
 
@@ -261,6 +264,17 @@
 }
 
 #pragma mark - ============= 加载本地文件 ========================
+- (void) loadHTMLString:(NSString *) html {
+    [self loadHTMLString:html baseURL:nil];
+}
+
+- (void) loadHTMLString:(NSString *) html baseURL:(NSString *_Nullable) base {
+    NSURL *url = nil;
+    if (base && base.length > 0) {
+        url = [NSURL URLWithString:base];
+    }
+    [self.wkView loadHTMLString:html baseURL:url];
+}
 
 - (void) loadLocalHTML:(NSString *) file {
     
@@ -274,7 +288,7 @@
     [self loadURL:url];
 }
 
-- (void) loadLocalHTML:(NSString *) path withExtension:(NSString *)ext {
+- (void) loadLocalHTML:(NSString *) path withExtension:(NSString * _Nullable)ext {
     
     if (ext == nil) {
         ext = @"";
@@ -292,7 +306,7 @@
     [self loadLocalFile:file withExtension:nil];
 }
 
-- (void) loadLocalFile:(NSString *) file withExtension:(NSString *)ext {
+- (void) loadLocalFile:(NSString *) file withExtension:(NSString *_Nullable)ext {
     
     NSURL *url = [[NSBundle mainBundle] URLForResource:file withExtension:ext];
     
@@ -300,7 +314,9 @@
 }
 
 #pragma mark - ============= 添加需要执行的js方法 ==============
-- (void) addJavaScriptMethod:(NSString *)methodName param:(NSDictionary *)param completionHandler:(LQWebViewJavaScriptCompletionHandler) handler {
+- (void) addJavaScriptMethod:(NSString *)methodName
+                       param:(NSDictionary * _Nullable)param
+           completionHandler:(LQWebViewJavaScriptCompletionHandler) handler {
     
     LQJavaScriptItem *item = [[LQJavaScriptItem alloc]init];
     
@@ -311,7 +327,9 @@
     [self.javaScriptMethods setObject:item forKey:item.key];
 }
 
-- (void) addJavaScriptMethod:(NSString *)methodName params:(NSArray *) params completionHandler:(LQWebViewJavaScriptCompletionHandler) handler {
+- (void) addJavaScriptMethod:(NSString *)methodName
+                      params:(NSArray *_Nullable) params
+           completionHandler:(LQWebViewJavaScriptCompletionHandler) handler {
     
     NSMutableArray *objs = [NSMutableArray arrayWithCapacity:params.count];
     for (id obj in params) {
@@ -328,7 +346,8 @@
 }
 
 #pragma mark - ============= 添加需要执行的js ==================
-- (void) addJavaScript:(NSString *) js completionHandler:(LQWebViewJavaScriptCompletionHandler) handler {
+- (void) addJavaScript:(NSString *) js
+     completionHandler:(LQWebViewJavaScriptCompletionHandler) handler {
     
     LQJavaScriptItem *item = [[LQJavaScriptItem alloc]init];
     item.key = [self __md5Encode:js];
@@ -343,7 +362,9 @@
     [self.wkView.configuration.userContentController addUserScript:us];
 }
 
-- (void) runJavaScriptMethod:(NSString *) methodName param:(NSDictionary *)param completionHandler:(void (^ _Nullable)(_Nullable id info, NSError * _Nullable error))completionHandler {
+- (void) runJavaScriptMethod:(NSString *) methodName
+                       param:(NSDictionary *_Nullable)param
+           completionHandler:(void (^ _Nullable)(_Nullable id info, NSError * _Nullable error))completionHandler {
     
     NSString *json = [self __objToJson:param];
     
@@ -392,7 +413,10 @@
     [self.observers setObject:item forKey:item.key];
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary<NSKeyValueChangeKey,id> *)change
+                       context:(void *)context {
     
     NSString *key = [self __md5Encode:keyPath];
     LQJavaScriptItem *item = [self.observers objectForKey:key];
@@ -511,7 +535,10 @@
         completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
     }
 }
-
+//- (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView {
+//
+//    NSLog(@"进程被终止");
+//}
 #pragma mark: - ===========  WKUIDelegate  ===============
 /**
  webView中弹出警告框时调用, 只能有一个按钮
@@ -737,4 +764,7 @@
 @end
 
 
+//@implementation LQWebView (Tools)
+//
+//@end
 

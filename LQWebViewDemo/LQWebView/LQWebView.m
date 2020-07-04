@@ -10,6 +10,7 @@
 
 #import "LQWebView.h"
 #import <CommonCrypto/CommonCrypto.h>
+#import "LQWebView+Tools.h"
 
 #pragma mark - ==== 避免直接使用WKScriptMessageHandler引起循环引用 ====
 @interface LQScriptMessageHandler : NSObject <WKScriptMessageHandler>
@@ -67,7 +68,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
+        self.timeoutInterval = 30.0;
     }
     return self;
 }
@@ -92,20 +93,6 @@
             }
         }
     }];
-}
-
-+ (void) configGlobalUserAgentSync:(NSString *) appendUserAgent {
-    
-    NSString *oldAgent = [[[UIWebView alloc]init] stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
-    
-    if ([oldAgent hasSuffix:appendUserAgent]) {
-        return ;
-    }
-    
-    NSString *newAgent = [NSString stringWithFormat:@"%@%@", oldAgent, appendUserAgent];
-    NSDictionary *dic = @{@"UserAgent": newAgent};
-    [[NSUserDefaults standardUserDefaults] registerDefaults:dic];
-    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 + (void) configCustomGlobalUserAgentSync:(NSString *) userAgent {
@@ -225,13 +212,21 @@
     self.wkView.UIDelegate = self ;
 }
 
+- (void) loadDataFromUrlString:(NSString *)urlString {
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSData *data = [NSData dataWithContentsOfURL:url];
+    
+    [self.webView loadData:data MIMEType:@"text/*" characterEncodingName:@"UTF-8" baseURL:url];
+}
+
 #pragma mark - ============= 加载网络URL ====================
 - (void) loadURLString:(NSString *)urlString {
+    urlString = [self encodeURL:urlString];
     NSURL *url = [NSURL URLWithString:urlString];
     [self loadURL:url];
 }
 
-- (void) loadUrlString:(NSString *)urlStr params:(NSDictionary * _Nullable)param {
+- (void) loadUrlString:(NSString *)urlString params:(NSDictionary * _Nullable)param {
     
     if (param && param.count > 0) {
         
@@ -244,10 +239,11 @@
             }
         }
         
-        urlStr = [NSString stringWithFormat:@"%@?%@", urlStr, paramStr];
+        urlString = [NSString stringWithFormat:@"%@?%@", urlString, paramStr];
     }
     
-    NSURL *url = [NSURL URLWithString:urlStr];
+    urlString = [self encodeURL:urlString];
+    NSURL *url = [NSURL URLWithString:urlString];
     [self loadURL:url];
 }
 
@@ -258,7 +254,7 @@
         return;
     }
     
-    NSURLRequest *req = [NSURLRequest requestWithURL:url];
+    NSURLRequest *req = [NSURLRequest requestWithURL:url cachePolicy:(NSURLRequestUseProtocolCachePolicy) timeoutInterval:self.timeoutInterval];
     [self loadRequest:req];
 }
 
@@ -268,6 +264,17 @@
 }
 
 #pragma mark - ============= 加载本地文件 ========================
+- (void) loadHTMLString:(NSString *) html {
+    [self loadHTMLString:html baseURL:nil];
+}
+
+- (void) loadHTMLString:(NSString *) html baseURL:(NSString *_Nullable) base {
+    NSURL *url = nil;
+    if (base && base.length > 0) {
+        url = [NSURL URLWithString:base];
+    }
+    [self.wkView loadHTMLString:html baseURL:url];
+}
 
 - (void) loadLocalHTML:(NSString *) file {
     
@@ -528,7 +535,10 @@
         completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
     }
 }
-
+//- (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView {
+//
+//    NSLog(@"进程被终止");
+//}
 #pragma mark: - ===========  WKUIDelegate  ===============
 /**
  webView中弹出警告框时调用, 只能有一个按钮
@@ -754,4 +764,7 @@
 @end
 
 
+//@implementation LQWebView (Tools)
+//
+//@end
 
