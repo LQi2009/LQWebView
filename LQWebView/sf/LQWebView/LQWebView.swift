@@ -139,7 +139,7 @@ public class LQWebView: UIView {
     }()
     
     lazy var activityIndicator: UIActivityIndicatorView = {
-        let act = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        let act = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
         act.hidesWhenStopped = true
         act.center = self.center
         self.addSubview(act)
@@ -147,7 +147,7 @@ public class LQWebView: UIView {
     }()
     
     lazy var progressView: UIProgressView = {
-        let progress = UIProgressView(progressViewStyle: UIProgressViewStyle.default)
+        let progress = UIProgressView(progressViewStyle: UIProgressView.Style.default)
         progress.trackTintColor = self.backgroundColor
         self.addSubview(progress)
         return progress
@@ -428,13 +428,13 @@ extension LQWebView: WKScriptMessageHandler {
 
 extension LQWebView: WKNavigationDelegate {
     
-    private func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+    public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         print("begin")
         self.resetIndicatorState(true)
         self.delegate?.webViewStartLoad?(self)
     }
     
-    private func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         print("load success")
         self.resetIndicatorState(false)
         self.delegate?.webViewLoadSuccess?(self)
@@ -474,12 +474,12 @@ extension LQWebView: WKNavigationDelegate {
         }
     }
     
-    private func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         self.resetIndicatorState(false)
         self.delegate?.webView?(self, loadFailed: error)
     }
     
-    private func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    public func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         
         if self.delegate?.webView?(self, authenticationChallenge: challenge, completionHandler: completionHandler) == nil {
             
