@@ -108,7 +108,6 @@
     NSDate *dateFrom = [NSDate dateWithTimeIntervalSince1970:0];
     [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:websiteDataTypes modifiedSince:dateFrom completionHandler:^{
         // Done
-        NSLog(@"清除缓存");
     }];
 }
 
@@ -250,7 +249,7 @@
 - (void) loadURL:(NSURL *_Nullable)url {
     
     if (url == nil) {
-        NSLog(@"url Error");
+        NSLog(@"Error=url Error");
         return;
     }
     
@@ -456,7 +455,6 @@
 #pragma mark: - ============  WKNavigationDelegate  ===============
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
     
-    NSLog(@"开始调用");
     if (self.delegate && [self.delegate respondsToSelector:@selector(webViewStartLoad:)]) {
         [self.delegate webViewStartLoad:self];
     }
@@ -465,7 +463,7 @@
 }
 
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
-    NSLog(@"页面加载完成");
+    
     [self resetIndicatorState:NO];
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(webViewLoadSuccess:)]) {
@@ -500,7 +498,7 @@
                 }
                 
                 [webView evaluateJavaScript:js completionHandler:^(id _Nullable info, NSError * _Nullable error) {
-                    NSLog(@"%@", error);
+                    
                     if (item.jsHandler) {
                         item.jsHandler(info, error) ;
                     }
@@ -508,7 +506,7 @@
             } else if (item.obj && [item.obj isKindOfClass:[NSString class]] && (item.methodName== nil || item.methodName.length <= 0)) {
                 NSString *js = (NSString *)item.obj;
                 [webView evaluateJavaScript:js completionHandler:^(id _Nullable info, NSError * _Nullable error) {
-                    NSLog(@"%@", error);
+                    
                     if (item.jsHandler) {
                         item.jsHandler(info, error) ;
                     }
@@ -517,7 +515,7 @@
         }
     }
 }
-
+///
 - (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
     NSLog(@"页面加载失败");
     [self resetIndicatorState:NO];
@@ -526,7 +524,15 @@
         [self.delegate webView:self loadFailed:error];
     }
 }
-
+///首次加载失败的回调
+- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error {
+    
+    [self resetIndicatorState:NO];
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(webView:loadFailed:)]) {
+        [self.delegate webView:self loadFailed:error];
+    }
+}
 - (void)webView:(WKWebView *)webView didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(webView:authenticationChallenge:completionHandler:)]) {
